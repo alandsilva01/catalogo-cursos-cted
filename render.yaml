@@ -1,0 +1,14 @@
+# Blueprint do Render (plano gratuito). O banco PostgreSQL fica no Neon (gratuito):
+# informe a URL de conexao na variavel DATABASE_URL pelo painel do Render.
+services:
+  - type: web
+    name: catalogo-cursos-cted
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: Database__Provider
+        value: Postgres
+      - key: DATABASE_URL
+        sync: false
