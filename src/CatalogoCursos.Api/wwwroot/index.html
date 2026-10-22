@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SESI+Indústria — Cursos para impulsionar sua carreira</title>
+  <meta name="description" content="Catálogo de cursos do CTED: capacitação para profissionais da indústria em matemática, ciências, linguagens e sustentabilidade.">
+  <meta name="theme-color" content="#8b0000">
+  <link rel="icon" href="/assets/img/logo-sesi.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/OpenSans-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <header id="cabecalho" data-variante="hero" data-pagina="inicio"></header>
+
+  <main id="conteudo" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="container">
+        <h1 class="hero__titulo" id="hero-titulo">Impulsione sua carreira na indústria</h1>
+        <p class="hero__texto">Amplie seus conhecimentos com excelência na melhor plataforma de estudos da indústria brasileira</p>
+        <a class="botao botao--claro" href="/cursos.html">
+          Conhecer cursos
+          <svg class="botao__seta" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="secao" aria-labelledby="destaques-titulo">
+      <div class="container carrossel" id="carrossel-destaques">
+        <h2 class="secao__titulo" id="destaques-titulo">Principais cursos</h2>
+        <div id="destaques-estado"></div>
+        <ul class="carrossel__trilho carrossel__trilho--espaco" id="destaques-lista" aria-busy="true" tabindex="0"
+            aria-label="Principais cursos — role para ver mais">
+        </ul>
+        <div class="carrossel__rodape">
+          <a class="botao botao--contorno" href="/cursos.html">Ver todos os cursos</a>
+          <div class="carrossel__setas">
+            <button class="botao botao--icone" type="button" data-anterior aria-label="Cursos anteriores" aria-controls="destaques-lista">
+              <img src="/assets/icons/arrow-navigation.svg" alt="" width="28" height="28">
+            </button>
+            <button class="botao botao--icone" type="button" data-proximo aria-label="Próximos cursos" aria-controls="destaques-lista">
+              <img src="/assets/icons/arrow-navigation-1.svg" alt="" width="28" height="28">
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="sobre" aria-labelledby="impacto-titulo">
+      <div class="container impacto">
+        <div>
+          <h2 class="secao__titulo" id="impacto-titulo">Impacto transformador</h2>
+          <p class="impacto__texto">Resultados que demonstram o sucesso da nossa metodologia de capacitação contínua para a indústria</p>
+        </div>
+        <div>
+          <dl class="impacto__numeros">
+            <div class="impacto__linha"><dt class="impacto__rotulo">Profissionais Capacitados</dt><dd class="impacto__numero">25.000+</dd></div>
+            <div class="impacto__linha"><dt class="impacto__rotulo">Empresas parceiras</dt><dd class="impacto__numero">500+</dd></div>
+            <div class="impacto__linha"><dt class="impacto__rotulo">Avaliação média</dt><dd class="impacto__numero">4.8/5</dd></div>
+            <div class="impacto__linha"><dt class="impacto__rotulo">Horas de capacitação</dt><dd class="impacto__numero">2.5M+</dd></div>
+          </dl>
+          <ul class="diferenciais">
+            <li>
+              <span class="diferencial__icone"><img src="/assets/icons/01-certificacao-red.svg" alt="" width="28" height="28"></span>
+              <h3 class="diferencial__titulo">Certificação SESI</h3>
+              <p class="diferencial__texto">Cursos com a melhor certificação do mercado industrial reconhecidos pelo SESI.</p>
+            </li>
+            <li>
+              <span class="diferencial__icone"><img src="/assets/icons/02-professores-red.svg" alt="" width="28" height="28"></span>
+              <h3 class="diferencial__titulo">Professores especialistas</h3>
+              <p class="diferencial__texto">Contamos com professores reconhecidos por sua excelência no mercado.</p>
+            </li>
+            <li>
+              <span class="diferencial__icone"><img src="/assets/icons/03-suporte-red.svg" alt="" width="28" height="28"></span>
+              <h3 class="diferencial__titulo">Suporte contínuo</h3>
+              <p class="diferencial__texto">Você não está sozinho! Acompanhamento online durante todo o curso.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao cta" aria-labelledby="cta-titulo">
+      <div class="container cta__grade">
+        <div>
+          <h2 class="secao__titulo" id="cta-titulo">Pronto para transformar sua carreira?</h2>
+          <p class="cta__texto">Junte-se a milhares de profissionais que já estão transformando a indústria através dos nossos cursos. Invista no seu futuro hoje mesmo!</p>
+          <a class="botao botao--claro" href="/cursos.html">
+            Matricule-se
+            <svg class="botao__seta" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="cta__midia">
+          <img src="/assets/img/video-thumb.webp" alt="Dois profissionais da indústria analisando um equipamento" width="1280" height="720" loading="lazy">
+          <button class="botao-play" type="button" id="botao-video" aria-label="Assistir ao vídeo de apresentação">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5-12-7.5Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="rodape"></footer>
+
+  <script type="module" src="/js/layout.js"></script>
+  <script type="module" src="/js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de cursos — SESI+Indústria</title>
+  <meta name="description" content="Pesquise e filtre os cursos do CTED por categoria, modalidade e status.">
+  <meta name="theme-color" content="#8b0000">
+  <link rel="icon" href="/assets/img/logo-sesi.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <header id="cabecalho" data-variante="padrao" data-pagina="cursos"></header>
+
+  <main id="conteudo" tabindex="-1">
+    <section class="faixa-titulo" aria-labelledby="titulo-pagina">
+      <div class="container">
+        <nav class="trilha" aria-label="Você está em">
+          <ol>
+            <li><a href="/">Início</a></li>
+            <li aria-current="page">Cursos</li>
+          </ol>
+        </nav>
+        <h1 class="secao__titulo" id="titulo-pagina">Catálogo de cursos</h1>
+        <p class="faixa-titulo__texto">Encontre o curso ideal para o seu momento profissional. Pesquise pelo nome ou combine os filtros.</p>
+      </div>
+    </section>
+
+    <div class="container secao secao--colada">
+      <section aria-labelledby="indicadores-titulo">
+        <h2 class="visualmente-oculto" id="indicadores-titulo">O catálogo em números</h2>
+        <ul class="indicadores" id="indicadores" aria-busy="true">
+          <li class="indicador"><span class="indicador__numero">—</span><span class="indicador__rotulo">Cursos</span></li>
+          <li class="indicador"><span class="indicador__numero">—</span><span class="indicador__rotulo">Categorias</span></li>
+          <li class="indicador"><span class="indicador__numero">—</span><span class="indicador__rotulo">Horas de conteúdo</span></li>
+          <li class="indicador"><span class="indicador__numero">—</span><span class="indicador__rotulo">Com inscrições abertas</span></li>
+        </ul>
+      </section>
+
+      <form class="filtros" id="filtros" role="search" aria-label="Pesquisar e filtrar cursos">
+        <div class="campo campo--busca">
+          <label class="campo__rotulo" for="busca">Pesquisar pelo nome</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="campo__controle" type="search" id="busca" name="busca" maxlength="100"
+                 placeholder="Ex.: matemática, metalurgia" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label class="campo__rotulo" for="categoria">Categoria</label>
+          <select class="campo__controle" id="categoria" name="categoria">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label class="campo__rotulo" for="modalidade">Modalidade</label>
+          <select class="campo__controle" id="modalidade" name="modalidade">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label class="campo__rotulo" for="status">Status</label>
+          <select class="campo__controle" id="status" name="status">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtros__acoes">
+          <button class="botao botao--contorno" type="reset" id="limpar">Limpar filtros</button>
+        </div>
+      </form>
+
+      <section aria-labelledby="resultados-contagem">
+        <div class="resultados__cabecalho">
+          <h2 class="resultados__contagem" id="resultados-contagem" aria-live="polite">Carregando cursos…</h2>
+          <p class="resultados__filtros-ativos" id="filtros-ativos"></p>
+        </div>
+        <div id="resultados-estado"></div>
+        <ul class="grade-cursos" id="resultados" aria-busy="true"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer id="rodape"></footer>
+
+  <script type="module" src="/js/layout.js"></script>
+  <script type="module" src="/js/cursos.js"></script>
+</body>
+</html>
