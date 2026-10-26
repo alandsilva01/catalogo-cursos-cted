@@ -13,10 +13,24 @@ public static class CursosEndpoints
     {
         var api = app.MapGroup("/api").WithTags("Catálogo");
 
-        api.MapGet("/cursos", ListarCursos);
-        api.MapGet("/cursos/{id:int}", ObterCurso);
-        api.MapGet("/filtros", ListarFiltros);
-        api.MapGet("/indicadores", ObterIndicadores);
+        api.MapGet("/cursos", ListarCursos)
+            .WithSummary("Lista os cursos")
+            .WithDescription("Filtros opcionais e combináveis: busca (nome, sem diferenciar acento e maiúsculas), categoria (slug), modalidade (Ead, Presencial, Hibrido), status (InscricoesAbertas, EmBreve, Encerrado) e destaque.")
+            .Produces<ListaCursosDto>()
+            .ProducesValidationProblem();
+
+        api.MapGet("/cursos/{id:int}", ObterCurso)
+            .WithSummary("Detalhes de um curso, com módulos e aulas")
+            .Produces<CursoDetalheDto>()
+            .ProducesProblem(StatusCodes.Status404NotFound);
+
+        api.MapGet("/filtros", ListarFiltros)
+            .WithSummary("Opções de categoria, modalidade e status, com a quantidade de cursos em cada uma")
+            .Produces<FiltrosDto>();
+
+        api.MapGet("/indicadores", ObterIndicadores)
+            .WithSummary("Totais e distribuição do catálogo")
+            .Produces<IndicadoresDto>();
     }
 
     // GET /api/cursos?busca=&categoria=&modalidade=&status=&destaque=

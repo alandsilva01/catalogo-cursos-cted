@@ -19,6 +19,15 @@ if (!string.IsNullOrWhiteSpace(porta))
 builder.Services.AddBancoDeDados(builder.Configuration);
 builder.Services.AddProblemDetails();
 
+// Documentacao interativa da API em /swagger (somente leitura, sem dados sensiveis)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(o => o.SwaggerDoc("v1", new()
+{
+    Title = "Catálogo de Cursos — CTED",
+    Version = "v1",
+    Description = "API de consulta do catálogo: listagem com pesquisa e filtros, detalhes, opções de filtro e indicadores."
+}));
+
 var origens = builder.Configuration.GetSection("Cors:Origens").Get<string[]>() ?? [];
 if (origens.Length > 0)
 {
@@ -43,6 +52,9 @@ app.Use(async (context, next) =>
 if (origens.Length > 0)
     app.UseCors();
 
+app.UseSwagger();
+app.UseSwaggerUI(o => o.DocumentTitle = "API — Catálogo de Cursos CTED");
+
 // Front-end estatico (wwwroot): index.html, cursos.html, curso.html...
 app.UseDefaultFiles();
 app.UseStaticFiles(new StaticFileOptions
@@ -57,9 +69,12 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet("/health", () => Results.Ok(new { status = "ok" })).ExcludeFromDescription();
 app.MapCursosEndpoints();
 
 await BancoDeDados.PrepararAsync(app.Services);
 
 app.Run();
+
+// Torna a classe Program visivel para os testes de integracao (WebApplicationFactory)
+public partial class Program;
