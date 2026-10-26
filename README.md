@@ -2,8 +2,9 @@
 
 Aplicação web para consulta do catálogo de cursos do **Centro de Tecnologias e Educação Digital (CTED)**. O usuário consulta, pesquisa e filtra cursos, vê os detalhes de cada oferta e acessa uma área do aluno com módulos e aulas.
 
-- **Aplicação publicada:** _(adicionar a URL do Render após a publicação)_
+- **Aplicação publicada:** https://catalogo-cursos-cted-9u7l.onrender.com (plano gratuito: o primeiro acesso após um período parado pode levar cerca de 1 minuto)
 - **Repositório:** https://github.com/alandsilva01/catalogo-cursos-cted
+- **Pacote de publicação (ZIP):** https://github.com/alandsilva01/catalogo-cursos-cted/releases/latest
 
 ---
 
@@ -104,7 +105,7 @@ Acesse **http://localhost:8080**.
 
 ### Opção C — pacote publicado (ZIP)
 
-Requisito: [ASP.NET Core Runtime 8](https://dotnet.microsoft.com/download/dotnet/8.0).
+Requisito: [ASP.NET Core Runtime 8](https://dotnet.microsoft.com/download/dotnet/8.0). O ZIP está na página de [releases](https://github.com/alandsilva01/catalogo-cursos-cted/releases/latest).
 
 ```bash
 # descompacte catalogo-cursos-cted-publicacao.zip e, dentro da pasta:
@@ -228,7 +229,7 @@ categorias 1 ── N cursos 1 ── N modulos 1 ── N aulas
 
 ## 11. Processo de publicação
 
-1. **Banco:** criar um projeto gratuito no [Neon](https://neon.tech) e copiar a *connection string* (`postgresql://...`).
+1. **Banco:** criar um projeto gratuito no [Neon](https://neon.tech) e copiar a *connection string* (`postgresql://...`) da conexão direta (sem *connection pooling*).
 2. **Aplicação:** no [Render](https://render.com), criar um **Web Service** a partir do repositório do GitHub (runtime Docker, plano Free). O arquivo `render.yaml` já descreve o serviço.
 3. **Variáveis de ambiente no Render:**
    - `Database__Provider` = `Postgres`
@@ -236,7 +237,9 @@ categorias 1 ── N cursos 1 ── N modulos 1 ── N aulas
 4. **Deploy:** a cada `git push` na `main`, o Render recompila a imagem (`Dockerfile` multi-stage: SDK → runtime) e reinicia. Na primeira subida, as tabelas são criadas e populadas automaticamente.
 5. **Verificação:** o endpoint `/health` é usado como *health check*.
 
-**Pacote de publicação (ZIP):** gerado com `dotnet publish -c Release`, contém a aplicação compilada, o `wwwroot` e as dependências. Para rodar, siga a opção C da seção 5.
+**Ambiente publicado:** Render (Web Service Docker, plano Free) + Neon (PostgreSQL, plano Free, região AWS US East). Nenhum serviço pago foi contratado.
+
+**Pacote de publicação (ZIP):** gerado com `dotnet publish -c Release`, contém a aplicação compilada, o `wwwroot` e as dependências. Está disponível na página de [releases](https://github.com/alandsilva01/catalogo-cursos-cted/releases/latest). Para rodar, siga a opção C da seção 5.
 
 ## 12. Limitações conhecidas e itens não concluídos
 
@@ -244,7 +247,7 @@ categorias 1 ── N cursos 1 ── N modulos 1 ── N aulas
 - **Matrícula:** o botão "Matricule-se" leva à área do aluno do curso; não há cadastro nem pagamento, que estão fora do escopo do teste.
 - **Criação do banco com `EnsureCreated`** em vez de *migrations*: adequado para um catálogo somente leitura, mas uma mudança no modelo exige recriar o banco.
 - **Plano gratuito do Render:** o serviço "dorme" após um período sem acesso, e a primeira requisição pode levar cerca de 1 minuto.
-- **Docker:** os arquivos de container foram escritos, mas não executados no ambiente de desenvolvimento, que não tinha Docker instalado.
+- **Docker:** a imagem é compilada e executada pelo Render a cada deploy. O `docker-compose.yml` (aplicação + PostgreSQL local) não foi executado no ambiente de desenvolvimento, que não tinha Docker instalado.
 - **Integração com Moodle** (diferencial opcional): não implementada.
 - **Formulários de contato:** "Fale com a gente" e "Fale conosco" abrem o e-mail do usuário (`mailto:`).
 
