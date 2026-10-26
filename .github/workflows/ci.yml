@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# So leitura: o workflow nao precisa escrever nada no repositorio
+permissions:
+  contents: read
+
+jobs:
+  build-e-testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restaurar pacotes
+        run: dotnet restore CatalogoCursos.sln
+
+      - name: Compilar
+        run: dotnet build CatalogoCursos.sln --no-restore -c Release
+
+      - name: Testes de integracao
+        run: dotnet test CatalogoCursos.sln --no-build -c Release
+
+      # Falha o build se algum pacote (direto ou transitivo) tiver vulnerabilidade conhecida
+      - name: Pacotes vulneraveis
+        run: |
+          dotnet list CatalogoCursos.sln package --vulnerable --include-transitive | tee vulneraveis.txt
+          ! grep -q "has the following vulnerable packages" vulneraveis.txt

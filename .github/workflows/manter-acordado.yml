@@ -1,0 +1,20 @@
+name: Manter aplicacao acordada
+
+# O plano gratuito do Render desliga o servico apos ~15 min sem acesso.
+# Um ping a cada 10 min evita a espera de ~1 min no primeiro acesso.
+# Restrito ao horario comercial de Brasilia (08h-20h, seg-sex = 11h-23h UTC)
+# para nao consumir as 750 h/mes gratuitas, compartilhadas entre os servicos da conta.
+on:
+  schedule:
+    - cron: "*/10 11-22 * * 1-5"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chamar /health
+        run: curl --fail --silent --show-error --max-time 90 --retry 2 https://catalogo-cursos-cted-9u7l.onrender.com/health
