@@ -13,7 +13,8 @@ A IA foi usada em todas as etapas, como apoio:
 | Análise | Ler o PDF de instruções e transformá-lo em checklist; analisar as telas do Figma e os arquivos fornecidos (cores extraídas dos SVGs, fontes e imagens) |
 | Back-end | Escrever o código em **C#/.NET**, linguagem que eu não dominava (minha base é PHP/Laravel), com explicações de cada conceito comparadas ao equivalente no Laravel |
 | Front-end | Acelerar a escrita do HTML, do CSS e do JavaScript a partir do Figma |
-| Testes | Criar e executar testes automatizados (API, navegador e acessibilidade) |
+| Testes | Criar e executar testes automatizados (API, navegador e acessibilidade), incluindo os testes de integração em xUnit e o workflow de CI |
+| Segurança | Verificar dependências com vulnerabilidade conhecida. Foi encontrado um alerta alto no `SQLitePCLRaw` 2.1.6, que vem com o EF Core 8; a versão foi fixada em 3.0.5 e os testes foram executados de novo |
 | Documentação | Estruturar o README com os itens pedidos no PDF |
 
 ## Prompts relevantes

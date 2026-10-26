@@ -1,10 +1,13 @@
 # Catálogo de Cursos — CTED
 
+[![CI](https://github.com/alandsilva01/catalogo-cursos-cted/actions/workflows/ci.yml/badge.svg)](https://github.com/alandsilva01/catalogo-cursos-cted/actions/workflows/ci.yml)
+
 Aplicação web para consulta do catálogo de cursos do **Centro de Tecnologias e Educação Digital (CTED)**. O usuário consulta, pesquisa e filtra cursos, vê os detalhes de cada oferta e acessa uma área do aluno com módulos e aulas.
 
 - **Aplicação publicada:** https://catalogo-cursos-cted-9u7l.onrender.com (plano gratuito: o primeiro acesso após um período parado pode levar cerca de 1 minuto)
 - **Repositório:** https://github.com/alandsilva01/catalogo-cursos-cted
 - **Pacote de publicação (ZIP):** https://github.com/alandsilva01/catalogo-cursos-cted/releases/latest
+- **Documentação interativa da API (Swagger):** https://catalogo-cursos-cted-9u7l.onrender.com/swagger
 
 ---
 
@@ -30,7 +33,9 @@ Disponibilizar um catálogo de cursos com:
 | Front-end | **HTML5, CSS3 e JavaScript** (ES Modules), sem framework |
 | Fonte e ícones | Open Sans (licença OFL) e SVGs fornecidos com o protótipo |
 | Publicação | Docker, Render (plano gratuito) e Neon (PostgreSQL gratuito) |
-| Testes | Playwright e axe-core (acessibilidade) |
+| Documentação da API | Swagger / OpenAPI (Swashbuckle) |
+| Testes | **xUnit** + `WebApplicationFactory` (integração da API), Playwright e axe-core (navegador e acessibilidade) |
+| Integração contínua | GitHub Actions: compilação, testes e verificação de pacotes vulneráveis a cada push |
 
 ## 3. Arquitetura da solução
 
@@ -49,7 +54,7 @@ PostgreSQL (publicação)  |  SQLite (local)
 - **Banco escolhido por configuração** (`Database:Provider`): SQLite para rodar sem instalar nada e PostgreSQL na publicação. O código da aplicação é o mesmo nos dois casos.
 - **Criação e carga do banco automáticas:** na primeira execução, as tabelas são criadas e populadas com dados fictícios (`Data/SeedData.cs`).
 - **Erros padronizados** no formato *Problem Details* (RFC 9457): `400` para parâmetros inválidos e `404` para curso inexistente.
-- **Segurança:** a API é somente leitura (apenas `GET`), valida os parâmetros e envia cabeçalhos `X-Content-Type-Options`, `X-Frame-Options` e `Referrer-Policy`. No front-end, todo dado vindo da API é escapado antes de entrar no HTML (`esc()` em `js/componentes.js`).
+- **Segurança:** a API é somente leitura (apenas `GET`), valida os parâmetros e envia cabeçalhos `X-Content-Type-Options`, `X-Frame-Options` e `Referrer-Policy`. No front-end, todo dado vindo da API é escapado antes de entrar no HTML (`esc()` em `js/componentes.js`). As dependências são verificadas contra vulnerabilidades conhecidas no CI; por isso o `SQLitePCLRaw` está fixado em uma versão corrigida.
 
 ## 4. Estrutura das pastas
 
@@ -74,6 +79,12 @@ catalogo-cursos-cted/
 │       ├── css/estilos.css
 │       ├── js/                 # api.js, componentes.js, layout.js e um script por página
 │       └── assets/             # fontes, ícones e imagens (WebP)
+├── tests/CatalogoCursos.Api.Tests/
+│   ├── ApiFactory.cs           # sobe a aplicação em memória com um SQLite temporário
+│   └── CursosEndpointsTests.cs # testes de integração dos endpoints
+├── .github/workflows/
+│   ├── ci.yml                  # compilação, testes e pacotes vulneráveis
+│   └── manter-acordado.yml     # ping em /health para o serviço gratuito não "dormir"
 ├── database/                   # scripts SQL de criação (PostgreSQL e SQLite)
 ├── Dockerfile
 ├── docker-compose.yml          # aplicação + PostgreSQL local
@@ -112,6 +123,16 @@ Requisito: [ASP.NET Core Runtime 8](https://dotnet.microsoft.com/download/dotnet
 dotnet CatalogoCursos.Api.dll --urls http://localhost:5080
 ```
 
+### Testes automatizados
+
+Requisito: .NET SDK 8. Na raiz do repositório:
+
+```bash
+dotnet test
+```
+
+São 13 testes de integração: cada um faz requisições HTTP reais à aplicação, que roda em memória com um banco SQLite temporário (o banco de desenvolvimento não é alterado). Cobrem listagem, pesquisa sem acento e maiúsculas, filtros combinados, lista vazia, parâmetros inválidos (`400`), limite da pesquisa, curso inexistente (`404`), soma da carga horária dos módulos, cabeçalhos de segurança e recusa de métodos de escrita.
+
 ## 6. Configuração do banco
 
 | Configuração | Valor | Uso |
@@ -142,6 +163,8 @@ Base: `/api`. Todas as respostas são JSON.
 | GET | `/api/filtros` | Opções de categoria, modalidade e status, com a quantidade de cursos em cada uma |
 | GET | `/api/indicadores` | Totais do catálogo: cursos, categorias, carga horária e distribuição por categoria, modalidade e status |
 | GET | `/health` | Verificação de saúde, usada pelo Render |
+
+**Documentação interativa:** em `/swagger` é possível ver os parâmetros e formatos de resposta de cada endpoint e testá-los pelo navegador. Ela fica disponível também na publicação, porque a API é pública e somente leitura.
 
 Exemplos:
 
@@ -236,6 +259,8 @@ categorias 1 ── N cursos 1 ── N modulos 1 ── N aulas
    - `DATABASE_URL` = connection string do Neon
 4. **Deploy:** a cada `git push` na `main`, o Render recompila a imagem (`Dockerfile` multi-stage: SDK → runtime) e reinicia. Na primeira subida, as tabelas são criadas e populadas automaticamente.
 5. **Verificação:** o endpoint `/health` é usado como *health check*.
+6. **Integração contínua:** a cada push, o GitHub Actions (`ci.yml`) compila, roda os testes e falha se houver pacote com vulnerabilidade conhecida.
+7. **Disponibilidade:** o workflow `manter-acordado.yml` chama `/health` a cada 10 minutos em horário comercial (seg–sex, 08h–20h de Brasília), para evitar a espera do primeiro acesso. Fica restrito a esse horário para não esgotar as horas gratuitas mensais do Render.
 
 **Ambiente publicado:** Render (Web Service Docker, plano Free) + Neon (PostgreSQL, plano Free, região AWS US East). Nenhum serviço pago foi contratado.
 
@@ -246,7 +271,7 @@ categorias 1 ── N cursos 1 ── N modulos 1 ── N aulas
 - **Sem autenticação:** a área do aluno é demonstrativa, e o progresso das aulas fica salvo no navegador (`localStorage`), não no servidor.
 - **Matrícula:** o botão "Matricule-se" leva à área do aluno do curso; não há cadastro nem pagamento, que estão fora do escopo do teste.
 - **Criação do banco com `EnsureCreated`** em vez de *migrations*: adequado para um catálogo somente leitura, mas uma mudança no modelo exige recriar o banco.
-- **Plano gratuito do Render:** o serviço "dorme" após um período sem acesso, e a primeira requisição pode levar cerca de 1 minuto.
+- **Plano gratuito do Render:** o serviço "dorme" após um período sem acesso, e a primeira requisição pode levar cerca de 1 minuto. O ping automático reduz isso em horário comercial, mas o GitHub pode atrasar execuções agendadas, e fora desse horário a espera continua.
 - **Docker:** a imagem é compilada e executada pelo Render a cada deploy. O `docker-compose.yml` (aplicação + PostgreSQL local) não foi executado no ambiente de desenvolvimento, que não tinha Docker instalado.
 - **Integração com Moodle** (diferencial opcional): não implementada.
 - **Formulários de contato:** "Fale com a gente" e "Fale conosco" abrem o e-mail do usuário (`mailto:`).
